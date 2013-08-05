@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_webview_listclaim"
+          android:title="@string/webview_menu_listclaim"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/menu_webview_return"
+        android:title="@string/webview_menu_return"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+</menu>

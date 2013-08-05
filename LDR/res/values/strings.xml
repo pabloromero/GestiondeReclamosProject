@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gestion de Reclamos</string>
+    <string name="label_welcome">Bienvenido a L.D.R.</string>
+    <string name="button_login">Iniciar Sesión </string>
+    <string name="prompt_email">Usuario</string>
+    <string name="prompt_contrasenia">Contraseña</string>
+    <string name="login_progress_signing_in">Enviando infomación…</string>
+    <string name="error_invalid_password">La contraseña es corta</string>
+    <string name="error_incorrect_password">La Contraseña es incorrecta</string>
+    <string name="error_field_required">Este Campo es requerido</string>
+    <string name="app_dialog_title">Procesando...</string>
+    <string name="app_dialog_mesagge_wait">Por favor espere...</string>
+    <string name="title_activity_home">Principal</string>
+
+    <!-- Menu Option inferior -->
+    <string name="action_exit_app">Salir</string>
+
+    <!-- GPS MSJ -->
+    <string name="GPS_SETTINGS">GPS Ajustes</string>
+    <string name="GPS_NOT_ENABLE">GPS no está activado. ¿Quieres ir al menú de configuración?</string>
+    <string name="GPS_BUTTON_SETTING">Ajustes</string>
+    <string name="GPS_BUTTON_CANCEL">Salir</string>
+    <string name="title_activity_list_claim">MainActivity</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_web_view">Mapa / Reclamos</string>
+    <string name="webview_menu_return">Salir</string>
+    <string name="webview_menu_listclaim">Listado de Reclamos</string>
+    <string name="listclaim_menu_return">Volver</string>
+
+</resources>
