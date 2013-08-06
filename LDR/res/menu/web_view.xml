@@ -4,6 +4,10 @@
           android:title="@string/webview_menu_listclaim"
           android:orderInCategory="100"
           android:showAsAction="never" />
+    <item android:id="@+id/menu_webview_reload"
+          android:title="@string/webview_menu_reload"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
     <item android:id="@+id/menu_webview_return"
         android:title="@string/webview_menu_return"
         android:orderInCategory="100"

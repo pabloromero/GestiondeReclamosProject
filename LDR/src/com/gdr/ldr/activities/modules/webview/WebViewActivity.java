@@ -26,6 +26,12 @@ public class WebViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
+        reloadMpaClaim();
+
+    }
+
+    protected void reloadMpaClaim(){
+
         browser = (WebView)findViewById(R.id.webkit);
 
 
@@ -34,7 +40,7 @@ public class WebViewActivity extends Activity {
         browser.getSettings().setBuiltInZoomControls(true);
 
         //TODO cambiar encriptando con el usuario logeado armando el passport conrrespondiente
-        browser.loadUrl("http://local-reclamos.com/?passport=passportgdrtemporalconelusuari");
+        browser.loadUrl("http://local-reclamos.com/ldr?passport=PASSPORTGDRTEMPORALCONELUSUARIO");
 
 
         browser.setWebViewClient(new WebViewClient()
@@ -72,11 +78,15 @@ public class WebViewActivity extends Activity {
 
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_webview_return:
                 finish();
+                return true;
+            case R.id.menu_webview_reload:
+                reloadMpaClaim();
                 return true;
             case R.id.menu_webview_listclaim:
                 Intent i =  new Intent(this, ListClaimActivity.class);

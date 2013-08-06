@@ -28,6 +28,7 @@
     <string name="title_activity_web_view">Mapa / Reclamos</string>
     <string name="webview_menu_return">Salir</string>
     <string name="webview_menu_listclaim">Listado de Reclamos</string>
+    <string name="webview_menu_reload">Recargar Mapa</string>
     <string name="listclaim_menu_return">Volver</string>
 
 </resources>
