@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -22,8 +23,6 @@ import java.util.Timer;
  * Created by promero on 01/08/13.
  */
 public class GPSTracker extends Service implements LocationListener {
-
-
 
     private final Context mContext;
 
@@ -49,6 +48,9 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
+    private IBinder mBinder = new LocalBinder();
+
+
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
@@ -56,8 +58,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(LOCATION_SERVICE);
+
+            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+
+            //locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 
             // getting GPS status
             isGPSEnabled = locationManager
@@ -67,7 +71,7 @@ public class GPSTracker extends Service implements LocationListener {
             isNetworkEnabled = locationManager
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            Toast.makeText(getApplicationContext(), "Estado: isGPSEnabled: " + isGPSEnabled + "\nisNetworkEnabled: " + isNetworkEnabled, Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(), "Estado: isGPSEnabled: " + isGPSEnabled + "\nisNetworkEnabled: " + isNetworkEnabled, Toast.LENGTH_LONG).show();
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 this.canGetLocation = false;
@@ -132,6 +136,7 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to get latitude
      * */
     public double getLatitude(){
+    	getLocation();
         if(location != null){
             latitude = location.getLatitude();
         }
@@ -165,7 +170,7 @@ public class GPSTracker extends Service implements LocationListener {
      * On pressing Settings button will lauch Settings Options
      * */
     public void showSettingsAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext );
 
         // Setting Dialog Title
 
@@ -193,6 +198,13 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.show();
     }
 
+
+    public class LocalBinder extends Binder {
+        public GPSTracker getServerInstance() {
+            return GPSTracker.this;
+        }
+    }
+
     @Override
     public void onLocationChanged(Location location) {
     }
@@ -211,7 +223,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public IBinder onBind(Intent arg0) {
-        return null;
+        return mBinder;
     }
 
 }

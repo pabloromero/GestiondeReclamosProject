@@ -146,8 +146,8 @@ public class MainLoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                /*homeActivity = new Intent(getApplicationContext(), HomeActivity.class);*/
-                homeActivity = new Intent(getApplicationContext(), WebViewActivity.class);
+                homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+                //homeActivity = new Intent(getApplicationContext(), WebViewActivity.class);
                 startActivity(homeActivity);
                 finish(); // termina la activity actual
             } else {

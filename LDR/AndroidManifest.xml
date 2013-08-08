@@ -10,8 +10,11 @@
         android:targetSdkVersion="17" />
 
     <!-- Permisos de la aplicación -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permisson.ACCESS_WIFI_STATE"/>
 
     <!-- Vistas o Activities -->
     <!-- Inicio o Login -->
@@ -45,8 +48,8 @@
             android:label="@string/title_activity_web_view" >
         </activity>
 
-        <!-- Servicio en Background que informa la posición -->
-        <service android:name="com.gdr.ldr.service.PositionService" />
+        <!-- Servicio en Background que informa la posición
+        <service android:name="com.gdr.ldr.service.GPSTracker" />-->
 
     </application>
 

@@ -12,7 +12,8 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:measureWithLargestChild="true">
 
 
         <Button android:id="@+id/btnShowLocation"
@@ -36,6 +37,87 @@
                 android:layout_height="wrap_content"
                 android:text="Abrir Navegador"/>
 
+        <HorizontalScrollView
+                android:fillViewport="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <TableLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+
+                <!--Columna estado de sistema-->
+                <TableRow
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                    <TableRow android:baselineAligned="false" android:paddingTop="10dp">
+                        <TextView android:text="Estados de Internet"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText android:width="100dip"
+                                  android:id="@+id/text_state_system"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+                    </TableRow>
+                </TableRow>
+
+
+                <!--Columna estado de latitude/longitude-->
+                <TableRow
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                    <TableRow android:baselineAligned="false" android:paddingTop="10dp">
+                        <TextView android:text="Latitude"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText android:width="150dip"
+                                  android:id="@+id/text_lat"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+
+                    </TableRow>
+                </TableRow>
+
+
+                <!--Columna estado de longitude-->
+                <TableRow
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                    <TableRow android:baselineAligned="false" android:paddingTop="10dp">
+                        <TextView android:text="Longitud"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+                    </TableRow>
+
+                    <TableRow>
+                        <EditText android:width="150dip"
+                                  android:id="@+id/text_long"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"/>
+                    </TableRow>
+                </TableRow>
+
+
+            </TableLayout>
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 

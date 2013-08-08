@@ -1,202 +1,229 @@
 package com.gdr.ldr.activities.modules;
 
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Bundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gdr.ldr.R;
 import com.gdr.ldr.activities.modules.Claim.ListClaimActivity;
 import com.gdr.ldr.activities.modules.webview.WebViewActivity;
 import com.gdr.ldr.service.GPSTracker;
-import com.gdr.ldr.service.PositionService;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static java.lang.String.*;
 
 public class HomeActivity extends Activity {
 
-    private Button btnShowLocation;
-    private Button btnCancelLocation;
-    private Button btnShowListClaim;
-    private Button btnShowOpenBrowser;
-    private PendingIntent pendingIntent;
-    private Timer mTimer = null;
+	private Button btnShowLocation;
+	private Button btnCancelLocation;
+	private Button btnShowListClaim;
+	private Button btnShowOpenBrowser;
+	private PendingIntent pendingIntent;
+	private Timer mTimer = null;
 
-    // GPSTracker class
-    GPSTracker gps = new GPSTracker(HomeActivity.this);
+	// private Intent serviceIntent;
+	// boolean mBounded;
+	// GPSTracker mServer;
+	private GPSTracker gps;
 
+	public static final long NOTIFY_INTERVAL = 10 * 2000; // 20 seconds
 
-    public static final long NOTIFY_INTERVAL = 10 * 2000; // 20 seconds
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_home);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+		btnShowListClaim = (Button) findViewById(R.id.btnShowListClaim);
+		btnShowLocation = (Button) findViewById(R.id.btnShowLocation);
+		btnCancelLocation = (Button) findViewById(R.id.btnCancelLocation);
+		btnShowOpenBrowser = (Button) findViewById(R.id.btnShowOpenBrowser);
 
-        btnShowListClaim = (Button) findViewById(R.id.btnShowListClaim);
-        btnShowLocation = (Button) findViewById(R.id.btnShowLocation);
-        btnCancelLocation = (Button) findViewById(R.id.btnCancelLocation);
-        btnShowOpenBrowser = (Button) findViewById(R.id.btnShowOpenBrowser);
+		btnShowOpenBrowser.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				openBrowser();
+			}
+		});
 
+		btnShowListClaim.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				changeActivityList();
+			}
+		});
 
-        btnShowOpenBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+		btnShowLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// startService(new
+				// Intent(HomeActivity.this,PositionService.class));
+				if (mTimer == null) {
+					mTimer = new Timer();
+				}
 
-                openBrowser();
+				Log.i("LDR -> INFO", "Información LAT/LONG INCICIANDO");
+				gps = new GPSTracker(HomeActivity.this);
+				mTimer.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						try {
+							Log.i("LDR -> INFO",
+									"Información LAT/LONG INFORMANDO");
 
-            }
-        });
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
 
-        btnShowListClaim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeActivityList();
-            }
-        });
+									EditText editTextLat = (EditText) findViewById(R.id.text_lat);
+									editTextLat.setText(new String(String
+											.valueOf(gps.getLatitude())));
 
+									EditText editTextLong = (EditText) findViewById(R.id.text_long);
+									editTextLong.setText(new String(String
+											.valueOf(gps.getLongitude())));
 
-        btnShowLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //startService(new Intent(HomeActivity.this,PositionService.class));
-                Timer t = new Timer();
-                //Set the schedule function and rate
-                t.scheduleAtFixedRate(new TimerTask() {
+									// Toast.makeText(getApplicationContext(),
+									// "Your Location is - \nLat: " + latitude +
+									// "\nLong: " + longitude,
+									// Toast.LENGTH_LONG).show();
+								}
+							});
 
-                    @Override
-                    public void run() {
-                        Log.i("gps.getLatitude(): ", new String(String.valueOf(gps.getLatitude())));
-                        Log.i("gps.getLongitude():",  new String(String.valueOf(gps.getLongitude())));
-                    }
+							// HttpHandler handler = new HttpHandler();
+							// String txt =
+							// handler.post("http://192.168.150.119:8080/GDR-API_Restful/adr/service/promero/"+gps.getLatitude()+"/"+gps.getLongitude());
 
-                },
-                //Set how long before to start calling the TimerTask (in milliseconds)
-                        0,
-                    //Set the amount of time between each execution (in milliseconds)
-                        10000);
+							Log.i("gps.getLatitude(): ",
+									new String(
+											String.valueOf(gps.getLatitude())));
+							Log.i("gps.getLongitude():",
+									new String(String.valueOf(gps
+											.getLongitude())));
 
+						} catch (Exception e) {
+							// e.printStackTrace();
+							Log.e("ERRORRRRRR", e.getMessage());
+						}
+					}
+				},
+				// Set how long before to start calling the TimerTask (in
+				// milliseconds)
+						0,
+						// Set the amount of time between each execution (in
+						// milliseconds)
+						10000);
 
-            }
+			}
 
-            /*@Override
-            public void onClick(View arg0) {
-                // create class object
-                gps = new GPSTracker(HomeActivity.this);
-                // check if GPS enabled
-                //if(gps.canGetLocation()){
+			/*
+			 * @Override public void onClick(View arg0) { gps = new
+			 * GPSTracker(HomeActivity.this);
+			 * 
+			 * // check if GPS enabled if(gps.canGetLocation()){
+			 * 
+			 * double latitude = gps.getLatitude(); double longitude =
+			 * gps.getLongitude();
+			 * 
+			 * // \n is for new line Toast.makeText(getApplicationContext(),
+			 * "Your Location is - \nLat: " + latitude + "\nLong: " + longitude,
+			 * Toast.LENGTH_LONG).show(); }else{ // can't get location // GPS or
+			 * Network is not enabled // Ask user to enable GPS/network in
+			 * settings gps.showSettingsAlert(); }
+			 * 
+			 * }
+			 */
+		});
+		// geo fix 2.2 1.1
 
-                    double latitude = gps.getLatitude();
-                    double longitude = gps.getLongitude();
+		btnCancelLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (mTimer != null) {
+					mTimer.cancel();
 
-                    // \n is for new line
-                    Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+					EditText editTextLat = (EditText) findViewById(R.id.text_lat);
+					editTextLat.setText("", TextView.BufferType.EDITABLE);
 
-                    //Construimos el objeto cliente en formato JSON
-                    try {
-                        HttpClient httpClient = new DefaultHttpClient();
+					EditText editTextLong = (EditText) findViewById(R.id.text_long);
+					editTextLong.setText("", TextView.BufferType.EDITABLE);
 
-                        HttpPost post = new
-                                HttpPost("http://10.0.2.2:2731/Api/Clientes/Cliente");
+					mTimer = null;
 
-                        post.setHeader("content-type", "application/json");
+					Log.i("LDR -> INFO", "Información LAT/LONG CANCELADO");
 
+				}
 
-                        JSONObject dato = new JSONObject();
+			}
+		});
 
-                        dato.put("latitude", latitude);
-                        dato.put("longitude", longitude);
+		// show location button click event
+		/*
+		 * btnShowLocation.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * 
+		 * 
+		 * });
+		 */
 
-                    } catch(Exception ex)
-                    {
-                        Log.e("ServicioRest","Error!", ex);
-                    }
+	}
 
-                }else{
-                    // can't get location
-                    // GPS or Network is not enabled
-                    // Ask user to enable GPS/network in settings
-                    gps.showSettingsAlert();
-                }
+	/*
+	 * @Override protected void onStart() { super.onStart(); Intent mIntent =
+	 * new Intent(this, GPSTracker.class); bindService(mIntent, mConnection,
+	 * BIND_AUTO_CREATE); };
+	 * 
+	 * ServiceConnection mConnection = new ServiceConnection() {
+	 * 
+	 * public void onServiceDisconnected(ComponentName name) {
+	 * Toast.makeText(HomeActivity.this, "Service is disconnected",
+	 * 1000).show(); mBounded = false; mServer = null; }
+	 * 
+	 * public void onServiceConnected(ComponentName name, IBinder service) {
+	 * Toast.makeText(HomeActivity.this, "Service is connected", 1000).show();
+	 * mBounded = true; GPSTracker.LocalBinder mLocalBinder =
+	 * (GPSTracker.LocalBinder)service; mServer =
+	 * mLocalBinder.getServerInstance(); } };
+	 * 
+	 * @Override protected void onStop() { super.onStop(); if(mBounded) {
+	 * unbindService(mConnection); mBounded = false; } };
+	 */
 
-            }*/
+	private void openBrowser() {
+		Intent i = new Intent(this, WebViewActivity.class);
+		startActivity(i);
+	}
 
-        });
+	private void changeActivityList() {
+		Intent i = new Intent(this, ListClaimActivity.class);
+		startActivity(i);
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.home, menu);
+		return true;
+	}
 
-        btnCancelLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //stopService(new Intent(HomeActivity.this,PositionService.class));
-            }
-        });
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_exit_app_home:
+			System.exit(0);
+			finish();
+			return true;
+		default:
+			return false;
+		}
 
-
-
-
-
-        // show location button click event
-       /*
-       btnShowLocation.setOnClickListener(new View.OnClickListener() {
-
-
-
-        });
-*/
-
-
-    }
-
-    private void openBrowser(){
-        Intent i =  new Intent(this, WebViewActivity.class);
-        startActivity(i);
-    }
-
-    private void changeActivityList(){
-        Intent i =  new Intent(this, ListClaimActivity.class);
-        startActivity(i);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_exit_app_home:
-                System.exit(0);
-                finish();
-                return true;
-            default:
-                return false;
-        }
-
-    }
+	}
 
 }
